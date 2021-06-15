@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "717647893390",
+    "project_id": "luis-barbosa-dr4-at",
+    "storage_bucket": "luis-barbosa-dr4-at.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717647893390:android:38656edb6b36b16eaa4adf",
+        "android_client_info": {
+          "package_name": "br.edu.infnet.luis_barbosa_dr4_at"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717647893390-a9poa8ms9lfcja3uool93cj6qrsm3n6v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKTpbNFl4CeG6VwbxHamhVpULadhw2ysY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717647893390-a9poa8ms9lfcja3uool93cj6qrsm3n6v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
