@@ -3,7 +3,6 @@ package br.edu.infnet.luis_barbosa_dr4_at.viewModel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import br.edu.infnet.luis_barbosa_dr4_at.database.repository.NotesRepository
 import br.edu.infnet.luis_barbosa_dr4_at.model.Note
 
@@ -29,7 +28,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         mRepository.updateNote(note)
     }
 
-    fun deleteNoteFromTitle(title: String) {
-        mRepository.deleteNoteFromTitle(title)
+    fun deleteNoteByTitle(title: String) {
+        mRepository.deleteNoteByTitle(title)
     }
 }

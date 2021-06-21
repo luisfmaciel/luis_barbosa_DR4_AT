@@ -28,8 +28,6 @@ import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_IMAGEM
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_LOCAL
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TEXTO
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TITULO
-import br.edu.infnet.luis_barbosa_dr4_at.database.NoteDatabase
-import br.edu.infnet.luis_barbosa_dr4_at.database.asyncTask.DeleteTitleAsyncTask
 import br.edu.infnet.luis_barbosa_dr4_at.model.Note
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.NoteViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -226,7 +224,7 @@ class AddNoteActivity : AppCompatActivity() {
         if (file.exists()) {
             file.delete()
             if (id == 0) {
-                noteViewModel.deleteNoteFromTitle(title)
+                noteViewModel.deleteNoteByTitle(title)
             }
         }
     }
