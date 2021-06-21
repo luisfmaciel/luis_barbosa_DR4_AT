@@ -22,5 +22,5 @@ interface NoteDao {
     fun all() : LiveData<List<Note>>
 
     @Query("DELETE FROM notes WHERE titulo = :titulo")
-    fun deleteNoteByTitle(titulo: String)
+    fun deleteNoteFromTitle(titulo: String)
 }

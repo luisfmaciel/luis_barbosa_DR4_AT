@@ -7,6 +7,7 @@ import br.edu.infnet.luis_barbosa_dr4_at.Util.DELETE
 import br.edu.infnet.luis_barbosa_dr4_at.Util.INSERT
 import br.edu.infnet.luis_barbosa_dr4_at.Util.UPDATE
 import br.edu.infnet.luis_barbosa_dr4_at.database.NoteDatabase
+import br.edu.infnet.luis_barbosa_dr4_at.database.asyncTask.DeleteTitleAsyncTask
 import br.edu.infnet.luis_barbosa_dr4_at.database.asyncTask.InsertAsyncTask
 import br.edu.infnet.luis_barbosa_dr4_at.database.dao.NoteDao
 import br.edu.infnet.luis_barbosa_dr4_at.model.Note
@@ -37,5 +38,9 @@ class NotesRepository(application: Application) {
 
     fun updateNote(note: Note) {
         InsertAsyncTask(noteDao, UPDATE).execute(note)
+    }
+
+    fun deleteNoteFromTitle(title: String) {
+        DeleteTitleAsyncTask(noteDao).execute(title)
     }
 }

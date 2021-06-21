@@ -47,7 +47,6 @@ class AddNoteActivity : AppCompatActivity() {
     private val GRANTED = PackageManager.PERMISSION_GRANTED
     private val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
     private val CAMERA  = Manifest.permission.CAMERA
-    private var dbRoom: NoteDatabase? = null
     private var LATITUDE = ""
     private var LONGITUDE = ""
     private var LOCATION = ""
@@ -60,8 +59,6 @@ class AddNoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
-
-        dbRoom = NoteDatabase.invoke(this)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -229,7 +226,7 @@ class AddNoteActivity : AppCompatActivity() {
         if (file.exists()) {
             file.delete()
             if (id == 0) {
-                DeleteTitleAsyncTask(dbRoom!!.noteDao()).execute(title)
+                noteViewModel.deleteNoteFromTitle(title)
             }
         }
     }

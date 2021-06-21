@@ -28,4 +28,8 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     fun updateNote(note: Note){
         mRepository.updateNote(note)
     }
+
+    fun deleteNoteFromTitle(title: String) {
+        mRepository.deleteNoteFromTitle(title)
+    }
 }
