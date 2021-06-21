@@ -20,20 +20,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
+import androidx.security.crypto.EncryptedFile
+import androidx.security.crypto.MasterKeys
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_DATA
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_ID
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_IMAGEM
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_LOCAL
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TEXTO
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TITULO
-import br.edu.infnet.luis_barbosa_dr4_at.cryptography.Encrypto
 import br.edu.infnet.luis_barbosa_dr4_at.model.Note
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.NoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_add_note.*
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
 import java.text.DateFormat
 import java.util.*
 
@@ -45,13 +44,14 @@ class AddNoteActivity : AppCompatActivity() {
     private val REQUEST_IMAGE_CAPTURE = 1001
     private val GRANTED = PackageManager.PERMISSION_GRANTED
     private val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
-    private val EXTERNAL = Manifest.permission.WRITE_EXTERNAL_STORAGE
     private val CAMERA  = Manifest.permission.CAMERA
     private var LATITUDE = ""
     private var LONGITUDE = ""
     private var LOCATION = ""
     private var imageBitmap: Bitmap? = null
     private var encodedImageString = ""
+    private var encFileText = ""
+
     private val encrypto = Encrypto()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +60,8 @@ class AddNoteActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val id = intent.getIntExtra(EXTRA_ID, 0)
 
@@ -77,11 +79,14 @@ class AddNoteActivity : AppCompatActivity() {
     private fun setupListeners(id: Int) {
         btn_save_note.setOnClickListener {
             val retornoIntent = Intent()
+
             val titulo = add_titulo_input.text.toString()
             val data = add_data_input.text.toString()
             val foto = encodedImageString
             val localizacao = LOCATION
             val texto = add_text_input.text.toString()
+
+            writeInAInternalFile(titulo, texto)
 
             if (encodedImageString.isNotEmpty() && titulo.isNotEmpty() &&
                     data.isNotEmpty() && texto.isNotEmpty()) {
@@ -90,9 +95,7 @@ class AddNoteActivity : AppCompatActivity() {
                 retornoIntent.putExtra(EXTRA_DATA, data)
                 retornoIntent.putExtra(EXTRA_IMAGEM, foto)
                 retornoIntent.putExtra(EXTRA_LOCAL, localizacao)
-                retornoIntent.putExtra(EXTRA_TEXTO, texto)
-
-                actionWriteExternal()
+                retornoIntent.putExtra(EXTRA_TEXTO, encFileText)
 
                 setResult(Activity.RESULT_OK, retornoIntent)
                 finish()
@@ -109,11 +112,13 @@ class AddNoteActivity : AppCompatActivity() {
             val data = intent.getStringExtra(EXTRA_DATA)
             encodedImageString = intent.getStringExtra(EXTRA_IMAGEM)!!
             LOCATION = intent.getStringExtra(EXTRA_LOCAL)!!
-            val texto = intent.getStringExtra(EXTRA_TEXTO)
+            encFileText = intent.getStringExtra(EXTRA_TEXTO)!!
+            val texto = readInAInternalFile(encFileText)
+
             btn_save_note.text = getString(R.string.update)
             add_titulo_input.setText(titulo.toString())
             add_data_input.setText(data.toString())
-            add_text_input.setText(texto.toString())
+            add_text_input.setText(texto)
             tv_add_location.text = LOCATION
 
             val bytarray: ByteArray = Base64.decode(encodedImageString, Base64.DEFAULT)
@@ -171,56 +176,77 @@ class AddNoteActivity : AppCompatActivity() {
         }
     }
 
-    fun actionWriteExternal(){
-        when {
-            checkSelfPermission(EXTERNAL) == GRANTED -> writeInAExternalFile()
-            shouldShowRequestPermissionRationale(EXTERNAL) -> showDialogPermission(
-                "É preciso liberar o acesso ao armazenamento externo!",
-                arrayOf(EXTERNAL)
-            )
-            else -> requestPermissions(
-                arrayOf(EXTERNAL),
-                REQUEST_PERMISSION_CODE
-            )
-        }
+    private fun getEncFile(nome: String): EncryptedFile{
+        val masterKeyAlias: String =
+            MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+
+        val file = File(applicationContext.filesDir, nome)
+
+        return EncryptedFile.Builder(
+            file,
+            applicationContext,
+            masterKeyAlias,
+            EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB)
+            .build()
     }
 
-    private fun writeInAExternalFile(){
-        val titulo = intent.getStringExtra(EXTRA_TITULO)
-        val texto = intent.getStringExtra(EXTRA_TEXTO)
-        val data = getDate()
 
-        if (titulo != null && texto != null) {
-            val nomeArquivoTxt = "$titulo($data).txt"
-            val nomeArquivoFig = "$titulo($data).fig"
-            val fileTxt = File(getExternalFilesDir(null), nomeArquivoTxt)
-            val fileFig = File(getExternalFilesDir(null), nomeArquivoFig)
+    private fun writeInAInternalFile(title: String, text: String){
+        val date = getDate()
 
-            if (fileTxt.exists()) {
-                fileTxt.delete()
-            } else {
-                try {
-                    FileOutputStream(fileTxt).let {
-                        it.write("${encrypto.cipher(texto)}".toByteArray())
-                        it.close()
-                    }
-                } catch (e: Exception) {
-                    showSnackbar("${e.message}")
-                }
-            }
+        val nomeArquivoTxt = "${title}_$date.txt"
+        encFileText = nomeArquivoTxt
 
-            if (fileFig.exists()) {
-                fileFig.delete()
-            } else {
-                try {
-                    FileOutputStream(fileFig).let {
-                        it.write("${encrypto.cipher(encodedImageString)}".toByteArray())
-                        it.close()
-                    }
-                } catch (e: Exception) {
-                    showSnackbar("${e.message}")
-                }
-            }
+        deleteInAInternalFile(nomeArquivoTxt)
+
+        val encryptedOut: FileOutputStream =
+            getEncFile(nomeArquivoTxt).openFileOutput()
+        val pw = PrintWriter(text)
+        pw.println(text)
+        pw.flush()
+        encryptedOut.close()
+    }
+
+//    private fun writeInAInternalFile(titulo: String, texto: String){
+//        val data = getDate()
+//
+//        val fileNameTxt = "${titulo}_$data.txt"
+//        encFileText = fileNameTxt
+//
+//        deleteInAInternalFile(fileNameTxt)
+//
+//        applicationContext
+//            .openFileOutput(fileNameTxt, Context.MODE_PRIVATE).use {
+//            it.write(encrypto.cipher(texto))
+//            it.close()
+//        }
+//    }
+
+    private fun readInAInternalFile(file_name: String): String {
+
+        var texto = ""
+
+//        applicationContext
+//            .openFileInput(file_name)
+//            .bufferedReader().readLine().forEach {
+//                texto = it.toString()
+//            }
+
+        val encryptedIn: FileInputStream =
+            getEncFile(file_name).openFileInput()
+        val br = BufferedReader(InputStreamReader(encryptedIn))
+        br.lines().forEach {
+                t ->  texto = t.toString()
+        }
+        encryptedIn.close()
+        return texto
+    }
+
+    private fun deleteInAInternalFile(nome: String) {
+        val file = File(applicationContext.filesDir, nome)
+
+        if (file.exists()) {
+            file.delete()
         }
     }
 
@@ -304,7 +330,6 @@ class AddNoteActivity : AppCompatActivity() {
                     if (grantResults[index] == GRANTED)
                         when (permission) {
                             FINE_LOCATION -> getCurrentLocation()
-                            EXTERNAL -> writeInAExternalFile()
                         }
                     }
                 }
@@ -355,13 +380,14 @@ class AddNoteActivity : AppCompatActivity() {
                 val titulo = intent.getStringExtra(EXTRA_TITULO)
                 val retornoIntent = Intent()
                 if (titulo != null) {
+                    deleteInAInternalFile(encFileText)
                     actionDeleteNote()
                     setResult(RESULT_CANCELED, retornoIntent)
                     finish()
                 }
             }
         }
-        return true
+        return false
     }
 
     private fun actionDeleteNote() {
@@ -380,7 +406,13 @@ class AddNoteActivity : AppCompatActivity() {
             localizacao!!,
             texto!!
         )
-
         noteViewModel.deleteNote(note)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        super.onBackPressed()
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+        return true
     }
 }

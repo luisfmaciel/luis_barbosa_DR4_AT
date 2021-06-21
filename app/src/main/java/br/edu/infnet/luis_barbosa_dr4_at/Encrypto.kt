@@ -1,4 +1,4 @@
-package br.edu.infnet.luis_barbosa_dr4_at.cryptography
+package br.edu.infnet.luis_barbosa_dr4_at
 
 
 import android.security.keystore.KeyGenParameterSpec
@@ -66,27 +66,27 @@ class Encrypto {
         return cipher(message, key)
     }
 
-//    fun decipher(crypto: ByteArray, key: SecretKey?): String {
-//        if (key != null){
-//            Cipher.getInstance("$ALGOR/$CBC/$PKCS7").run {
-//                val value = ByteArray(crypto.size-CRYPTO_SIZE)
-//                crypto.copyInto(value, 0, CRYPTO_SIZE, crypto.size)
-//                crypto.copyInto(INITIAL_VECTOR, 0, 0, CRYPTO_SIZE)
-//                init(Cipher.DECRYPT_MODE, key, IvParameterSpec(INITIAL_VECTOR))
-//
-//                return String(doFinal(value))
-//            }
-//        }
-//        return ""
-//    }
-//
-//    fun decipher(crypto: ByteArray): String {
-//        val key = getSecretKey()
-//        return decipher(crypto, key)
-//    }
-//
-//    fun md5Hash(message: String): String {
-//        val messageDigest = MessageDigest.getInstance("MD5")
-//        return Base64.encodeToString(messageDigest.digest(message.toByteArray()), Base64.DEFAULT).trimEnd()
-//    }
+    fun decipher(crypto: ByteArray, key: SecretKey?): String {
+        if (key != null){
+            Cipher.getInstance("$ALGOR/$CBC/$PKCS7").run {
+                val value = ByteArray(crypto.size-CRYPTO_SIZE)
+                crypto.copyInto(value, 0, CRYPTO_SIZE, crypto.size)
+                crypto.copyInto(INITIAL_VECTOR, 0, 0, CRYPTO_SIZE)
+                init(Cipher.DECRYPT_MODE, key, IvParameterSpec(INITIAL_VECTOR))
+
+                return String(doFinal(value))
+            }
+        }
+        return ""
+    }
+
+    fun decipher(crypto: ByteArray): String {
+        val key = getSecretKey()
+        return decipher(crypto, key)
+    }
+
+    fun md5Hash(message: String): String {
+        val messageDigest = MessageDigest.getInstance("MD5")
+        return Base64.encodeToString(messageDigest.digest(message.toByteArray()), Base64.DEFAULT).trimEnd()
+    }
 }

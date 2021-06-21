@@ -62,17 +62,12 @@ class RegisterFragment : Fragment() {
     private fun checkPassword(): Boolean {
         val passwordInput = senha_register_input.text.toString()
         val confirmInput = confirmaSenha_register_input.text.toString()
-        val passwordREGEX: Pattern = Pattern.compile("""^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%¨&*()_+=-])(?=\S+$).{8,12}$""")
-        val match : Matcher = passwordREGEX.matcher(passwordInput)
         var flag = true
 
         if (passwordInput != confirmInput) {
             flag = false
         }
         if(passwordInput.isEmpty()){
-            flag = false
-        }
-        if(!match.matches()){
             flag = false
         }
         return flag
@@ -90,6 +85,8 @@ class RegisterFragment : Fragment() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show()
+                            userViewModel.email.value = auth.currentUser!!.email.toString()
+                            userViewModel.nome.value = auth.currentUser!!.displayName.toString()
                         }
                     }
                 findNavController().navigate(R.id.action_registerFragment_to_signInFragment, null)

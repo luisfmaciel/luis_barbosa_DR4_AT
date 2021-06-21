@@ -9,9 +9,6 @@ import br.edu.infnet.luis_barbosa_dr4_at.model.Note
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
-    val getAllNotes = MutableLiveData<Array<Note>>()
-
-
     private var mRepository: NotesRepository = NotesRepository(application)
 
     private var mAllNotes: LiveData<List<Note>> = mRepository.getAllNotes()

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,6 +21,7 @@ import br.edu.infnet.luis_barbosa_dr4_at.model.Note
 import br.edu.infnet.luis_barbosa_dr4_at.model.User
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.NoteViewModel
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.UserViewModel
+import com.google.android.gms.ads.AdRequest
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_note.*
 
@@ -59,6 +61,7 @@ class NoteFragment : Fragment() {
         fillUserData()
         subscribe()
         setupListeners()
+        bannerAd()
     }
 
     private fun setupRecyclerView() {
@@ -81,6 +84,10 @@ class NoteFragment : Fragment() {
         fab_add_note.setOnClickListener {
             val intent = Intent(context, AddNoteActivity::class.java)
             startActivityForResult(intent, ADD_REQUEST_CODE)
+        }
+        btn_versao_premium.setOnClickListener {
+            layout_adView.visibility = View.GONE
+            Toast.makeText(context, "Versão Premium liberada", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -162,6 +169,11 @@ class NoteFragment : Fragment() {
             }
         }
         return true
+    }
+
+    private fun bannerAd() {
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 
 }

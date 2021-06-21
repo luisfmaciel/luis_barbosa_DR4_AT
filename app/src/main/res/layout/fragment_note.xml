@@ -25,9 +25,10 @@
         android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:background="@drawable/ret_radius_bottom"
         android:elevation="10dp"
-        android:background="@drawable/ret_radius_bottom_gradient"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -84,13 +85,13 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorAccent"
             android:clickable="true"
             android:elevation="10dp"
             android:src="@android:drawable/ic_input_add"
-            app:tint="?attr/colorSecondary"
-            android:backgroundTint="?attr/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
