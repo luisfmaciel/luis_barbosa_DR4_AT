@@ -28,6 +28,8 @@ import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_IMAGEM
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_LOCAL
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TEXTO
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TITULO
+import br.edu.infnet.luis_barbosa_dr4_at.database.NoteDatabase
+import br.edu.infnet.luis_barbosa_dr4_at.database.asyncTask.DeleteTitleAsyncTask
 import br.edu.infnet.luis_barbosa_dr4_at.model.Note
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.NoteViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -45,6 +47,7 @@ class AddNoteActivity : AppCompatActivity() {
     private val GRANTED = PackageManager.PERMISSION_GRANTED
     private val FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION
     private val CAMERA  = Manifest.permission.CAMERA
+    private var dbRoom: NoteDatabase? = null
     private var LATITUDE = ""
     private var LONGITUDE = ""
     private var LOCATION = ""
@@ -58,12 +61,12 @@ class AddNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
 
+        dbRoom = NoteDatabase.invoke(this)
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val id = intent.getIntExtra(EXTRA_ID, 0)
 
         this.let {
                 act -> noteViewModel = ViewModelProviders.of(act)
@@ -71,12 +74,13 @@ class AddNoteActivity : AppCompatActivity() {
         }
 
         fillFieldsData()
-        setupListeners(id)
+        setupListeners()
         getLocation()
         changeImage()
     }
 
-    private fun setupListeners(id: Int) {
+    private fun setupListeners() {
+        val id = intent.getIntExtra(EXTRA_ID, 0)
         btn_save_note.setOnClickListener {
             val retornoIntent = Intent()
 
@@ -86,7 +90,7 @@ class AddNoteActivity : AppCompatActivity() {
             val localizacao = LOCATION
             val texto = add_text_input.text.toString()
 
-            writeInAInternalFile(titulo, texto)
+            writeInAInternalFile(titulo, id, texto)
 
             if (encodedImageString.isNotEmpty() && titulo.isNotEmpty() &&
                     data.isNotEmpty() && texto.isNotEmpty()) {
@@ -191,47 +195,24 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
-    private fun writeInAInternalFile(title: String, text: String){
+    private fun writeInAInternalFile(title: String, id: Int, text: String){
         val date = getDate()
 
         val nomeArquivoTxt = "${title}_$date.txt"
         encFileText = nomeArquivoTxt
 
-        deleteInAInternalFile(nomeArquivoTxt)
+        deleteInAInternalFile(nomeArquivoTxt, id, title)
 
         val encryptedOut: FileOutputStream =
             getEncFile(nomeArquivoTxt).openFileOutput()
-        val pw = PrintWriter(text)
+        val pw = PrintWriter(encryptedOut)
         pw.println(text)
         pw.flush()
         encryptedOut.close()
     }
 
-//    private fun writeInAInternalFile(titulo: String, texto: String){
-//        val data = getDate()
-//
-//        val fileNameTxt = "${titulo}_$data.txt"
-//        encFileText = fileNameTxt
-//
-//        deleteInAInternalFile(fileNameTxt)
-//
-//        applicationContext
-//            .openFileOutput(fileNameTxt, Context.MODE_PRIVATE).use {
-//            it.write(encrypto.cipher(texto))
-//            it.close()
-//        }
-//    }
-
     private fun readInAInternalFile(file_name: String): String {
-
         var texto = ""
-
-//        applicationContext
-//            .openFileInput(file_name)
-//            .bufferedReader().readLine().forEach {
-//                texto = it.toString()
-//            }
-
         val encryptedIn: FileInputStream =
             getEncFile(file_name).openFileInput()
         val br = BufferedReader(InputStreamReader(encryptedIn))
@@ -242,11 +223,14 @@ class AddNoteActivity : AppCompatActivity() {
         return texto
     }
 
-    private fun deleteInAInternalFile(nome: String) {
+    private fun deleteInAInternalFile(nome: String, id: Int, title: String) {
         val file = File(applicationContext.filesDir, nome)
 
         if (file.exists()) {
             file.delete()
+            if (id == 0) {
+                DeleteTitleAsyncTask(dbRoom!!.noteDao()).execute(title)
+            }
         }
     }
 
@@ -378,9 +362,10 @@ class AddNoteActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.item_delete -> {
                 val titulo = intent.getStringExtra(EXTRA_TITULO)
+                val id = intent.getIntExtra(EXTRA_ID, 0)
                 val retornoIntent = Intent()
                 if (titulo != null) {
-                    deleteInAInternalFile(encFileText)
+                    deleteInAInternalFile(encFileText, id, titulo)
                     actionDeleteNote()
                     setResult(RESULT_CANCELED, retornoIntent)
                     finish()

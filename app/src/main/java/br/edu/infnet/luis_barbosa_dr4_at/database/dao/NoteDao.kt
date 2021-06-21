@@ -15,12 +15,12 @@ interface NoteDao {
     @Delete
     fun deleteNote(notes: Note)
 
-    @Query("DELETE FROM notes")
-    fun deleteAll()
+//    @Query("DELETE FROM notes")
+//    fun deleteAll()
 
     @Query("SELECT * FROM notes")
     fun all() : LiveData<List<Note>>
 
-    @Query("SELECT * FROM notes WHERE titulo = :titulo")
-    fun getNoteByTitle(titulo: String) : LiveData<Note>
+    @Query("DELETE FROM notes WHERE titulo = :titulo")
+    fun deleteNoteByTitle(titulo: String)
 }

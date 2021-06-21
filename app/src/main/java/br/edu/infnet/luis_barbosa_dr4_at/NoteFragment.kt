@@ -2,7 +2,6 @@ package br.edu.infnet.luis_barbosa_dr4_at
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -18,7 +17,6 @@ import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_LOCAL
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TEXTO
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_TITULO
 import br.edu.infnet.luis_barbosa_dr4_at.model.Note
-import br.edu.infnet.luis_barbosa_dr4_at.model.User
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.NoteViewModel
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.UserViewModel
 import com.google.android.gms.ads.AdRequest
@@ -112,7 +110,7 @@ class NoteFragment : Fragment() {
                     data.let {
                         val id = it!!.getIntExtra(EXTRA_ID, 0)
                         val titulo = it.getStringExtra(EXTRA_TITULO)
-                        val mData = it.getStringExtra(EXTRA_DATA)
+                        val date = it.getStringExtra(EXTRA_DATA)
                         val imagem = it.getStringExtra(EXTRA_IMAGEM)!!
                         val localizacao = it.getStringExtra(EXTRA_LOCAL)
                         val texto = it.getStringExtra(EXTRA_TEXTO)
@@ -120,7 +118,7 @@ class NoteFragment : Fragment() {
                         val note = Note(
                             id,
                             titulo!!,
-                            mData!!,
+                            date!!,
                             imagem,
                             localizacao!!,
                             texto!!
@@ -160,9 +158,6 @@ class NoteFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_delete -> {
-                noteViewModel.deleteAll()
-            }
             R.id.item_logout -> {
                 auth.signOut()
                 findNavController().navigate(R.id.action_noteFragment_to_signInFragment, null)

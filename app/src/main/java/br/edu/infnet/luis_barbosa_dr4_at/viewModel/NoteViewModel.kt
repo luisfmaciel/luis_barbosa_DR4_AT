@@ -21,10 +21,6 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         mRepository.insert(note)
     }
 
-    fun deleteAll(){
-        mRepository.deleteAll()
-    }
-
     fun deleteNote(note: Note){
         mRepository.deleteNote(note)
     }
