@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/ret_gradient"
     android:id="@+id/root_layout"
-    tools:context=".AddNoteActivity">
+    tools:context=".ui.AddNoteActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

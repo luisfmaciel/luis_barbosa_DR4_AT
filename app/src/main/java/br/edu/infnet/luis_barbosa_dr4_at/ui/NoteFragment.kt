@@ -1,4 +1,4 @@
-package br.edu.infnet.luis_barbosa_dr4_at
+package br.edu.infnet.luis_barbosa_dr4_at.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.edu.infnet.luis_barbosa_dr4_at.R
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_DATA
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_ID
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_IMAGEM

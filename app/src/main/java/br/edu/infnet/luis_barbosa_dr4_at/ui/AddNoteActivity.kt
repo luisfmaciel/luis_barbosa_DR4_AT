@@ -1,4 +1,4 @@
-package br.edu.infnet.luis_barbosa_dr4_at
+package br.edu.infnet.luis_barbosa_dr4_at.ui
 
 import android.Manifest
 import android.app.Activity
@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKeys
+import br.edu.infnet.luis_barbosa_dr4_at.R
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_DATA
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_ID
 import br.edu.infnet.luis_barbosa_dr4_at.Util.EXTRA_IMAGEM

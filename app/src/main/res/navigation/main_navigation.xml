@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/signInFragment"
-        android:name="br.edu.infnet.luis_barbosa_dr4_at.SignInFragment"
+        android:name="br.edu.infnet.luis_barbosa_dr4_at.ui.SignInFragment"
         android:label="MyNotesApp"
         tools:layout="@layout/fragment_sign_in" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="br.edu.infnet.luis_barbosa_dr4_at.RegisterFragment"
+        android:name="br.edu.infnet.luis_barbosa_dr4_at.ui.RegisterFragment"
         android:label="Create your account"
         tools:layout="@layout/fragment_register" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteFragment"
-        android:name="br.edu.infnet.luis_barbosa_dr4_at.NoteFragment"
+        android:name="br.edu.infnet.luis_barbosa_dr4_at.ui.NoteFragment"
         android:label="My Notes"
         tools:layout="@layout/fragment_note" >
         <action

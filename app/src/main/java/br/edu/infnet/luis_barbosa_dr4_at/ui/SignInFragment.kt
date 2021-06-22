@@ -1,4 +1,4 @@
-package br.edu.infnet.luis_barbosa_dr4_at
+package br.edu.infnet.luis_barbosa_dr4_at.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import br.edu.infnet.luis_barbosa_dr4_at.R
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

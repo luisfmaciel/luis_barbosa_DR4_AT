@@ -15,9 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Luis_barbosa_DR4_AT">
 
-        <activity android:name=".AddNoteActivity"
+        <activity android:name=".ui.AddNoteActivity"
             android:label="@string/add_your_note"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

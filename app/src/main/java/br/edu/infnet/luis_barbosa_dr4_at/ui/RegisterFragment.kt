@@ -1,4 +1,4 @@
-package br.edu.infnet.luis_barbosa_dr4_at
+package br.edu.infnet.luis_barbosa_dr4_at.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import br.edu.infnet.luis_barbosa_dr4_at.model.User
+import br.edu.infnet.luis_barbosa_dr4_at.R
 import br.edu.infnet.luis_barbosa_dr4_at.viewModel.UserViewModel
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
@@ -16,8 +16,6 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.android.synthetic.main.fragment_register.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class RegisterFragment : Fragment() {
 

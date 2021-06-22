@@ -1,4 +1,4 @@
-package br.edu.infnet.luis_barbosa_dr4_at
+package br.edu.infnet.luis_barbosa_dr4_at.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import br.edu.infnet.luis_barbosa_dr4_at.R
 import com.google.android.gms.ads.MobileAds
 
 class MainActivity : AppCompatActivity() {
