@@ -42,15 +42,15 @@ class SignInFragment : Fragment() {
     }
 
     private fun setUpListeners(){
-        tv_not_member.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_registerFragment, null)
-        }
         btnLogin.setOnClickListener {
             if (etEmailLogin.text!!.isNotEmpty() && etSenhaLogin.text!!.isNotEmpty()) {
                 doLogIn()
             } else {
                 Toast.makeText(context, "Fill all Fields", Toast.LENGTH_SHORT).show()
             }
+        }
+        tv_not_member.setOnClickListener {
+            findNavController().navigate(R.id.action_signInFragment_to_registerFragment, null)
         }
     }
 
@@ -66,9 +66,8 @@ class SignInFragment : Fragment() {
         auth.signInWithEmailAndPassword(etEmailLogin.text.toString(), etSenhaLogin.text.toString())
             .addOnSuccessListener {
                 Toast.makeText(context, "Authentication Success", Toast.LENGTH_SHORT).show()
-                userViewModel.email.value = auth.currentUser!!.email.toString()
-                userViewModel.nome.value = auth.currentUser!!.displayName.toString()
-                findNavController().navigate(R.id.action_signInFragment_to_noteFragment, null)
+                mUser = auth.currentUser
+                updateUI()
             }
             .addOnFailureListener {
                 Toast.makeText(context, "Authentication Failure", Toast.LENGTH_SHORT).show()

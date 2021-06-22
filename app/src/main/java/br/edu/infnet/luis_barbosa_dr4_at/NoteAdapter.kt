@@ -40,14 +40,14 @@ class NoteAdapter(
         holder.data.text = note.data
 
         holder.update.setOnClickListener {
-            onClickListener(this.notesList!![position])
+            onClickListener(note)
         }
     }
 
     override fun getItemCount(): Int {
         return if (notesList != null){
             notesList!!.size
-        } else{
+        } else {
             0
         }
     }

@@ -52,8 +52,6 @@ class AddNoteActivity : AppCompatActivity() {
     private var encodedImageString = ""
     private var encFileText = ""
 
-    private val encrypto = Encrypto()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)

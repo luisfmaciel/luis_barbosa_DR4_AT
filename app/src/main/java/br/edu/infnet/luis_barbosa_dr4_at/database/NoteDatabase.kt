@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import br.edu.infnet.luis_barbosa_dr4_at.Util
 import br.edu.infnet.luis_barbosa_dr4_at.database.dao.NoteDao
 import br.edu.infnet.luis_barbosa_dr4_at.model.Note
+import br.edu.infnet.luis_barbosa_dr4_at.viewModel.UserViewModel
 
 @Database (
     entities = [Note::class],
@@ -27,7 +29,7 @@ abstract class NoteDatabase: RoomDatabase() {
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
             context,
             NoteDatabase::class.java,
-            "notesDatabase")
+            "NoteDB")
             .build()
     }
 
